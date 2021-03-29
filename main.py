@@ -10,7 +10,7 @@ def distance(p1, p2):
     distance = math.sqrt( ((p1[0]-p2[0])**2)+((p1[1]-p2[1])**2) )
     return distance
 
-class Car(object):
+class plane(object):
     def __init__(self, env):
         self.env = env
         # Start the run process everytime an instance is created.
@@ -18,10 +18,12 @@ class Car(object):
         self.battery = 100
         self.num_drivers = 0
         self.num_charges = 0
-        self.time_charging = 0
-        self.time_driving = 0
+        self.time_feuling = 0
+        self.time_inflight = 0
         self.X = 0
         self.Y = 0
+        self.speed = 150
+
 
     def run(self):
         while True:
@@ -53,7 +55,7 @@ class Car(object):
         self.battery = self.battery - trip_duration * 0.5
         #print("battery level at end: {}".format(self.battery))
 
-        self.time_driving += trip_duration
+        self.time_inflight += trip_duration
         self.X = dest_X
         self.Y = dest_Y
         self.num_drivers += 1
@@ -63,14 +65,14 @@ class Car(object):
         yield self.env.timeout(duration)
         #print('Charge complete at %d' % self.env.now)
         self.num_charges += 1
-        self.time_charging += duration
+        self.time_feuling += duration
 
 if __name__ == '__main__':
     env = simpy.Environment()
-    car = Car(env)
+    plane = plane(env)
     env.run(until=1050)
 
-    print('Number of drivers: %d' % car.num_drivers)
-    print('Number of charges: %d' %car.num_charges)
-    print('Time spent charging: %d' %car.time_charging)
-    print('Time spent driving: %d' %car.time_driving)
+    print('Number of drivers: %d' % plane.num_drivers)
+    print('Number of charges: %d' % plane.num_charges)
+    print('Time spent feuling: %d' % plane.time_feuling)
+    print('Time spent flying: %d' % plane.time_inflight)
